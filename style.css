@@ -12,22 +12,12 @@
 }
 
 body {
-    padding-top: 70px; /* keep navbar space */
+    padding-top: 70px;
     background-color: var(--bg-color);
     font-family: 'Quicksand', sans-serif; 
     color: var(--text-dark);
     background-image: radial-gradient(#fecfef 1px, transparent 1px);
-    background-size: 20px 20px;
-}
-
-/* ==================================
-   GLOBAL PADDING FIX (SAFE)
-================================== */
-
-/* Make all main sections even */
-.container {
-    padding-top: 40px;
-    padding-bottom: 40px;
+    background-size: 20px 20px; /* Cute polka dot pattern */
 }
 
 /* --- NAVBAR --- */
@@ -89,21 +79,16 @@ header {
 }
 
 /* --- CARDS & BOXES --- */
-.card,
-.demo-box,
-.member-card {
+.card, .demo-box, .member-card {
     background: rgba(255, 255, 255, 0.9);
     border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: 20px;
     box-shadow: 0 10px 25px rgba(255, 154, 158, 0.15);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-    /* FIX: normalize inner spacing */
-    padding: 20px;
+    padding: 25px;
 }
 
-.card:hover,
-.member-card:hover {
+.card:hover, .member-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 15px 35px rgba(161, 140, 209, 0.3);
 }
@@ -158,8 +143,8 @@ header {
 .code-input {
     width: 100%;
     min-height: 250px;
-    background-color: #232136;
-    color: #e0def4;
+    background-color: #232136; /* Deep purple background */
+    color: #e0def4; /* Soft white text */
     border: none;
     padding: 20px;
     font-family: 'JetBrains Mono', monospace;
@@ -169,14 +154,10 @@ header {
     line-height: 1.5;
 }
 
-/* --- Visual Containers --- */
+/* Visual Container for Stack/Queue/Array items */
 .visual-container {
     min-height: 80px;
-
-    /* FIX: balanced vertical spacing */
-    margin-top: 15px;
-    margin-bottom: 15px;
-
+    margin-top: 20px;
     padding: 15px;
     background-color: rgba(255,255,255,0.6);
     border: 2px dashed #ff9a9e;
@@ -186,11 +167,7 @@ header {
     flex-wrap: wrap;
     align-items: center;
 }
-
-#stack-visual {
-    flex-direction: column-reverse;
-}
-
+#stack-visual { flex-direction: column-reverse; } /* Stack logic */
 .data-item {
     background: var(--primary-gradient);
     color: white;
@@ -200,16 +177,12 @@ header {
     font-family: 'JetBrains Mono', monospace;
     animation: popIn 0.3s;
 }
+@keyframes popIn { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }
 
-@keyframes popIn {
-    0% { opacity: 0; transform: scale(0.5); }
-    100% { opacity: 1; transform: scale(1); }
-}
-
-/* --- FOOTER --- */
 footer {
     background: linear-gradient(to right, #6d597a, #355070);
     color: #ffcdb2;
     padding: 20px;
 }
-
+Sent
+Write to
