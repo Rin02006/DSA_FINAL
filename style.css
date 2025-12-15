@@ -184,3 +184,38 @@ footer {
     color: #ffcdb2;
     padding: 20px;
     }
+/* ===================================================
+   ✅ FIX: EVEN CARD & NAME HEIGHTS (ABOUT + ALGORITHMS)
+   (ADD ONLY — NO REMOVALS)
+   =================================================== */
+
+/* ABOUT PAGE – EVEN NAME HEIGHT & WIDTH */
+.member-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.member-card h5 {
+    min-height: 48px;          /* equal name height */
+    display: flex;
+    align-items: center;       /* vertical center */
+    justify-content: center;   /* horizontal center */
+    text-align: center;
+    margin-bottom: 6px;
+}
+
+/* ALGORITHMS PAGE – EVEN DEMO BOX HEIGHT */
+.demo-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100%;
+}
+
+/* Ensures buttons align evenly */
+.demo-box .btn {
+    align-self: center;
+    margin-top: 10px;
+}
+
