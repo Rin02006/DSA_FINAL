@@ -366,7 +366,8 @@ function drawLine(a, b) {
     ctx.beginPath();
     ctx.moveTo(a.x, a.y);
     ctx.lineTo(b.x, b.y);
-    ctx.strokeStyle = '#a18cd1';
+    // Girly pastel pink line
+    ctx.strokeStyle = '#f4a6c1';
     ctx.stroke();
 }
 
