@@ -218,4 +218,35 @@ footer {
     align-self: center;
     margin-top: 10px;
 }
+/* ===================================================
+   ✅ FINAL FIX: FORCE EQUAL HEIGHTS (BOOTSTRAP SAFE)
+   =================================================== */
+
+/* Stretch all columns equally */
+.row {
+    align-items: stretch;
+}
+
+/* ABOUT PAGE – force same height cards */
+.member-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Algorithms page cards */
+.demo-box {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Fix inner spacing consistency */
+.member-card > * ,
+.demo-box > * {
+    flex-shrink: 0;
+}
+
 
