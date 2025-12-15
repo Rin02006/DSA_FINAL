@@ -1,449 +1,304 @@
 /* =========================================
-   FIXED & WORKING script.js
-   Data Structures, Algorithms, BST Visualization
+   FINAL FIXED script.js
+   Data Structures, Algorithms, BST (Girly Theme)
    ========================================= */
 
 /* =========================================
-   PART 1: DATA STRUCTURES (Array, Stack, Queue)
+   PART 1: ARRAY + BINARY SEARCH
    ========================================= */
-
-/* --- ARRAY & BINARY SEARCH LOGIC --- */
 let myArray = [];
 
 function renderArray() {
-    const container = document.getElementById('array-visual');
-    container.innerHTML = '';
-    myArray.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'data-item';
-        div.innerText = item;
-        container.appendChild(div);
+    const c = document.getElementById('array-visual');
+    c.innerHTML = '';
+    myArray.forEach(v => {
+        const d = document.createElement('div');
+        d.className = 'data-item';
+        d.innerText = v;
+        c.appendChild(d);
     });
 }
 
 function arrayInsert() {
-    const input = document.getElementById('array-input');
-    const val = input.value;
-    if (val === '') return alert("Please enter a value");
-
-    myArray.push(parseInt(val));
-    input.value = '';
+    const i = document.getElementById('array-input');
+    if (!i.value) return alert("Enter value");
+    myArray.push(Number(i.value));
+    i.value = '';
     renderArray();
-    document.getElementById('array-message').innerText = `Inserted ${val}`;
 }
 
 function arrayDelete() {
-    const input = document.getElementById('array-input');
-    const val = parseInt(input.value);
-    const index = myArray.indexOf(val);
-
-    if (index > -1) {
-        myArray.splice(index, 1);
-        document.getElementById('array-message').innerText = `Deleted ${val}`;
-    } else {
-        alert("Value not found");
-    }
-    input.value = '';
+    const i = document.getElementById('array-input');
+    const idx = myArray.indexOf(Number(i.value));
+    if (idx === -1) return alert("Not found");
+    myArray.splice(idx, 1);
+    i.value = '';
     renderArray();
 }
 
 function runBinarySearch() {
-    const input = document.getElementById('bs-input');
-    const target = parseInt(input.value);
-    if (isNaN(target)) return alert("Enter number");
-    if (myArray.length === 0) return alert("Array Empty");
+    const t = Number(document.getElementById('bs-input').value);
+    if (isNaN(t)) return alert("Enter number");
 
     myArray.sort((a, b) => a - b);
     renderArray();
 
-    let low = 0, high = myArray.length - 1, foundIndex = -1;
-    while (low <= high) {
-        let mid = Math.floor((low + high) / 2);
-        if (myArray[mid] === target) {
-            foundIndex = mid;
-            break;
-        } else if (myArray[mid] < target) low = mid + 1;
-        else high = mid - 1;
+    let l = 0, r = myArray.length - 1;
+    while (l <= r) {
+        let m = Math.floor((l + r) / 2);
+        if (myArray[m] === t) return alert("Found!");
+        myArray[m] < t ? l = m + 1 : r = m - 1;
     }
-
-    const msg = document.getElementById('array-message');
-    if (foundIndex !== -1) {
-        msg.innerText = `Binary Search: Found ${target} at index ${foundIndex}`;
-        msg.style.color = "green";
-    } else {
-        msg.innerText = `Binary Search: ${target} Not Found`;
-        msg.style.color = "red";
-    }
+    alert("Not found");
 }
 
-/* --- STACK LOGIC --- */
-let myStack = [];
+/* =========================================
+   PART 2: STACK
+   ========================================= */
+let stack = [];
 const MAX_STACK = 5;
 
 function renderStack() {
-    const container = document.getElementById('stack-visual');
-    container.innerHTML = '';
-    [...myStack].reverse().forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'data-item';
-        div.innerText = item;
-        container.appendChild(div);
+    const c = document.getElementById('stack-visual');
+    c.innerHTML = '';
+    [...stack].reverse().forEach(v => {
+        const d = document.createElement('div');
+        d.className = 'data-item';
+        d.innerText = v;
+        c.appendChild(d);
     });
 }
 
 function stackPush() {
-    const msg = document.getElementById('stack-message');
-    if (myStack.length >= MAX_STACK) {
-        msg.innerText = "STACK OVERFLOW (Limit 5)";
-        msg.style.color = "red";
-        return;
-    }
-    const input = document.getElementById('stack-input');
-    const val = input.value;
-    if (val === '') return alert("Enter value");
-
-    myStack.push(val);
-    input.value = '';
+    if (stack.length >= MAX_STACK) return alert("Stack Overflow");
+    const i = document.getElementById('stack-input');
+    if (!i.value) return;
+    stack.push(i.value);
+    i.value = '';
     renderStack();
-    msg.innerText = `Pushed: ${val}`;
-    msg.style.color = "#6d597a";
 }
 
 function stackPop() {
-    const msg = document.getElementById('stack-message');
-    if (myStack.length === 0) {
-        msg.innerText = "STACK UNDERFLOW";
-        msg.style.color = "red";
-        return;
-    }
-    const popped = myStack.pop();
+    if (!stack.length) return alert("Stack Underflow");
+    stack.pop();
     renderStack();
-    msg.innerText = `Popped: ${popped}`;
-    msg.style.color = "#6d597a";
 }
 
 function stackPeek() {
-    const msg = document.getElementById('stack-message');
-    msg.innerText = myStack.length === 0
-        ? "Stack is Empty"
-        : `Peek (Top): ${myStack[myStack.length - 1]}`;
-    msg.style.color = "#6d597a";
+    alert(stack.length ? stack[stack.length - 1] : "Stack Empty");
 }
 
-function stackDisplay() {
-    const msg = document.getElementById('stack-message');
-    msg.innerText = myStack.length === 0
-        ? "Stack is Empty"
-        : `Full Stack: [ ${myStack.join(', ')} ]`;
-    msg.style.color = "#6d597a";
-}
-
-/* --- QUEUE LOGIC --- */
-let myQueue = [];
+/* =========================================
+   PART 3: QUEUE
+   ========================================= */
+let queue = [];
 
 function renderQueue() {
     const c = document.getElementById('queue-visual');
     c.innerHTML = '';
-    myQueue.forEach(i => {
+    queue.forEach(v => {
         const d = document.createElement('div');
         d.className = 'data-item';
-        d.innerText = i;
+        d.innerText = v;
         c.appendChild(d);
     });
 }
 
 function queueEnqueue() {
-    const val = document.getElementById('queue-input').value;
-    if (val === '') return alert("Enter value");
-    myQueue.push(val);
-    document.getElementById('queue-input').value = '';
+    const i = document.getElementById('queue-input');
+    if (!i.value) return;
+    queue.push(i.value);
+    i.value = '';
     renderQueue();
 }
 
 function queueDequeue() {
-    if (myQueue.length === 0) return alert("Queue Empty");
-    myQueue.shift();
+    if (!queue.length) return alert("Queue Empty");
+    queue.shift();
     renderQueue();
 }
 
 /* =========================================
-   PART 2: ALGORITHMS (Run Buttons)
+   PART 4: ALGORITHMS (RUN BUTTONS)
    ========================================= */
 function runAlgo(id) {
-    const outputBox = document.getElementById(`output-${id}`);
-    outputBox.innerHTML = '<span style="color:orange">Running...</span>';
+    const out = document.getElementById(`output-${id}`);
+    out.innerText = "Running...";
 
     setTimeout(() => {
-        try {
-            switch (id) {
-                case 1: {
-                    let a = prompt("Enter num1:");
-                    let b = prompt("Enter num2:");
-                    outputBox.innerText = a && b ? `Sum: ${Number(a) + Number(b)}` : "Cancelled";
-                    break;
-                }
-                case 2: {
-                    let n = prompt("Enter number:");
-                    outputBox.innerText = n ? `${n} is ${n % 2 == 0 ? 'Even' : 'Odd'}` : "Cancelled";
-                    break;
-                }
-                case 3: {
-                    let a = prompt("a:"), b = prompt("b:"), c = prompt("c:");
-                    outputBox.innerText = a && b && c ? `Max: ${Math.max(a, b, c)}` : "Cancelled";
-                    break;
-                }
-                case 4: {
-                    let f = prompt("Enter number:");
-                    let fact = 1;
-                    for (let i = 1; i <= f; i++) fact *= i;
-                    outputBox.innerText = `Factorial: ${fact}`;
-                    break;
-                }
-                case 5: {
-                    let t = prompt("Terms:");
-                    let arr = [0, 1];
-                    for (let i = 2; i < t; i++) arr.push(arr[i - 1] + arr[i - 2]);
-                    outputBox.innerText = `Series: ${arr.slice(0, t).join(', ')}`;
-                    break;
-                }
-                case 6: {
-                    let p = prompt("Enter number:");
-                    let prime = p > 1;
-                    for (let i = 2; i < p; i++) if (p % i === 0) prime = false;
-                    outputBox.innerText = prime ? "Prime" : "Not Prime";
-                    break;
-                }
-                case 7: {
-                    let a = prompt("A:"), b = prompt("B:");
-                    outputBox.innerText = `Swapped: A=${b}, B=${a}`;
-                    break;
-                }
-                case 8: {
-                    let t = prompt("Find in [10,20,30]:");
-                    outputBox.innerText = [10, 20, 30].includes(Number(t)) ? "Found" : "Not Found";
-                    break;
-                }
-                case 9: {
-                    let s = prompt("Enter string:");
-                    outputBox.innerText = s.split('').reverse().join('');
-                    break;
-                }
-                case 10: {
-                    let r = prompt("Radius:");
-                    outputBox.innerText = `Area: ${(Math.PI * r * r).toFixed(2)}`;
-                    break;
-                }
+        switch (id) {
+            case 1: {
+                let a = +prompt("A"), b = +prompt("B");
+                out.innerText = `Sum: ${a + b}`; break;
             }
-        } catch (e) {
-            outputBox.innerText = "Error";
+            case 2: {
+                let n = +prompt("Number");
+                out.innerText = n % 2 === 0 ? "Even" : "Odd"; break;
+            }
+            case 3: {
+                let a = +prompt("A"), b = +prompt("B"), c = +prompt("C");
+                out.innerText = `Max: ${Math.max(a, b, c)}`; break;
+            }
+            case 4: {
+                let f = +prompt("Number"), fact = 1;
+                for (let i = 1; i <= f; i++) fact *= i;
+                out.innerText = `Factorial: ${fact}`; break;
+            }
+            case 5: {
+                let t = +prompt("Terms"), arr = [0, 1];
+                for (let i = 2; i < t; i++) arr.push(arr[i - 1] + arr[i - 2]);
+                out.innerText = arr.slice(0, t).join(", "); break;
+            }
+            case 6: {
+                let p = +prompt("Number"), prime = p > 1;
+                for (let i = 2; i < p; i++) if (p % i === 0) prime = false;
+                out.innerText = prime ? "Prime" : "Not Prime"; break;
+            }
+            case 7: {
+                let a = prompt("A"), b = prompt("B");
+                out.innerText = `A=${b}, B=${a}`; break;
+            }
+            case 8: {
+                let t = +prompt("Find in [10,20,30]");
+                out.innerText = [10, 20, 30].includes(t) ? "Found" : "Not Found"; break;
+            }
+            case 9: {
+                let s = prompt("String");
+                out.innerText = s.split('').reverse().join(''); break;
+            }
+            case 10: {
+                let r = +prompt("Radius");
+                out.innerText = `Area: ${(Math.PI * r * r).toFixed(2)}`; break;
+            }
         }
     }, 200);
 }
-
 function runPseudo(id) { runAlgo(id); }
 
 /* =========================================
-   INFIX → POSTFIX / PREFIX (REAL LOGIC)
+   PART 5: INFIX → POSTFIX / PREFIX
    ========================================= */
+function prec(o) { return { '+':1,'-':1,'*':2,'/':2,'^':3 }[o] || 0; }
 
-function precedence(op) {
-    if (op === '+' || op === '-') return 1;
-    if (op === '*' || op === '/') return 2;
-    if (op === '^') return 3;
-    return 0;
-}
-
-function isOperator(ch) {
-    return ['+', '-', '*', '/', '^'].includes(ch);
-}
-
-function infixToPostfix(infix) {
-    let stack = [];
-    let postfix = '';
-
-    for (let ch of infix.replace(/\s+/g, '')) {
-        if (/[a-zA-Z0-9]/.test(ch)) {
-            postfix += ch;
-        } else if (ch === '(') {
-            stack.push(ch);
-        } else if (ch === ')') {
-            while (stack.length && stack[stack.length - 1] !== '(') {
-                postfix += stack.pop();
-            }
-            stack.pop();
-        } else if (isOperator(ch)) {
-            while (stack.length && precedence(stack[stack.length - 1]) >= precedence(ch)) {
-                postfix += stack.pop();
-            }
-            stack.push(ch);
+function infixToPostfix(exp) {
+    let s = [], out = '';
+    for (let c of exp.replace(/\s+/g,'')) {
+        if (/[a-zA-Z0-9]/.test(c)) out += c;
+        else if (c === '(') s.push(c);
+        else if (c === ')') {
+            while (s.length && s.at(-1) !== '(') out += s.pop();
+            s.pop();
+        } else {
+            while (s.length && prec(s.at(-1)) >= prec(c)) out += s.pop();
+            s.push(c);
         }
     }
-
-    while (stack.length) postfix += stack.pop();
-    return postfix;
+    while (s.length) out += s.pop();
+    return out;
 }
 
-function infixToPrefix(infix) {
-    let reversed = infix
-        .split('')
-        .reverse()
-        .map(ch => (ch === '(' ? ')' : ch === ')' ? '(' : ch))
-        .join('');
-
-    let postfix = infixToPostfix(reversed);
-    return postfix.split('').reverse().join('');
+function infixToPrefix(exp) {
+    let r = [...exp].reverse().map(c => c === '(' ? ')' : c === ')' ? '(' : c).join('');
+    return [...infixToPostfix(r)].reverse().join('');
 }
 
 function convertExpression() {
-    const input = document.getElementById('infix-input').value;
-    if (!input) return alert('Enter infix expression');
-
-    document.getElementById('out-infix').innerText = input;
-    document.getElementById('out-postfix').innerText = infixToPostfix(input);
-    document.getElementById('out-prefix').innerText = infixToPrefix(input);
+    const i = document.getElementById('infix-input').value;
+    document.getElementById('out-postfix').innerText = infixToPostfix(i);
+    document.getElementById('out-prefix').innerText = infixToPrefix(i);
 }
 
 /* =========================================
-   PART 3: BINARY SEARCH TREE (BST)
+   PART 6: BST (PINK THEME)
    ========================================= */
-let canvas, ctx, bstRoot = null;
+let canvas, ctx, root = null, busy = false;
 
-class VisualNode {
-    constructor(val, x, y) {
-        this.val = val;
-        this.left = null;
-        this.right = null;
-        this.x = x;
-        this.y = y;
+class Node {
+    constructor(v, x, y) {
+        this.v = v; this.x = x; this.y = y;
+        this.l = null; this.r = null;
     }
 }
 
-function insertNode(root, val, x, y, level) {
-    if (!root) return new VisualNode(val, x, y);
-    const offset = 200 / (level + 1);
-    if (val < root.val)
-        root.left = insertNode(root.left, val, x - offset, y + 60, level + 1);
-    else
-        root.right = insertNode(root.right, val, x + offset, y + 60, level + 1);
-    return root;
+function insert(n, v, x, y, l) {
+    if (!n) return new Node(v, x, y);
+    const o = 180 / l;
+    v < n.v ? n.l = insert(n.l, v, x - o, y + 60, l + 1)
+            : n.r = insert(n.r, v, x + o, y + 60, l + 1);
+    return n;
 }
 
 function bstInsert() {
-    const input = document.getElementById('bst-val');
-    const val = parseInt(input.value);
-    if (isNaN(val)) return alert("Enter a number");
-    bstRoot = insertNode(bstRoot, val, canvas.width / 2, 50, 1);
-    input.value = '';
-    drawTree();
-    logBST(`Inserted ${val}`);
+    const v = +document.getElementById('bst-val').value;
+    if (isNaN(v)) return;
+    root = insert(root, v, canvas.width / 2, 50, 1);
+    draw();
 }
 
-function drawTree() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    if (bstRoot) drawNode(bstRoot);
+function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    if (root) drawNode(root);
 }
 
-function drawNode(node) {
-    if (node.left) {
-        drawLine(node, node.left);
-        drawNode(node.left);
-    }
-    if (node.right) {
-        drawLine(node, node.right);
-        drawNode(node.right);
-    }
-    // Default girly pink node
-    drawCircle(node, '#ff9a9e');
-}
-    if (node.right) {
-        drawLine(node, node.right);
-        drawNode(node.right);
-    }
-    drawCircle(node, '#ff9a9e');
+function drawNode(n) {
+    if (n.l) { line(n,n.l); drawNode(n.l); }
+    if (n.r) { line(n,n.r); drawNode(n.r); }
+    circle(n, '#ff9a9e');
 }
 
-function drawLine(a, b) {
-    ctx.beginPath();
-    ctx.moveTo(a.x, a.y);
-    ctx.lineTo(b.x, b.y);
-    // Girly pastel pink line
+function line(a,b) {
     ctx.strokeStyle = '#f4a6c1';
-    ctx.stroke();
-}
-
-function drawCircle(node, color) {
     ctx.beginPath();
-    ctx.arc(node.x, node.y, 20, 0, Math.PI * 2);
-    ctx.fillStyle = color;
-    ctx.fill();
+    ctx.moveTo(a.x,a.y);
+    ctx.lineTo(b.x,b.y);
     ctx.stroke();
-    ctx.fillStyle = 'white';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.font = 'bold 14px Arial';
-    ctx.fillText(node.val, node.x, node.y);
 }
 
-async function searchNode(node, val) {
-    if (!node) return false;
-
-    // Soft pink highlight while traversing
-    drawCircle(node, '#f7b2cc');
-    await new Promise(r => setTimeout(r, 500));
-
-    if (node.val === val) {
-        // Stronger pink when found
-        drawCircle(node, '#ff6f91');
-        return true;
-    }
-
-    return val < node.val
-        ? await searchNode(node.left, val)
-        : await searchNode(node.right, val);
+function circle(n,c) {
+    ctx.fillStyle=c;
+    ctx.beginPath();
+    ctx.arc(n.x,n.y,20,0,Math.PI*2);
+    ctx.fill(); ctx.stroke();
+    ctx.fillStyle='white';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText(n.v,n.x,n.y);
 }
-    return val < node.val
-        ? await searchNode(node.left, val)
-        : await searchNode(node.right, val);
+
+async function search(n,v) {
+    if (!n) return false;
+    circle(n,'#f7b2cc');
+    await new Promise(r=>setTimeout(r,400));
+    if (n.v === v) { circle(n,'#ff6f91'); return true; }
+    return v < n.v ? search(n.l,v) : search(n.r,v);
 }
 
 async function bstSearch() {
-    const val = parseInt(document.getElementById('bst-val').value);
-    if (isNaN(val)) return alert("Enter value");
-    drawTree();
-    const found = await searchNode(bstRoot, val);
-    logBST(found ? `Found ${val}` : `${val} not found`);
+    if (busy) return;
+    busy = true;
+    draw();
+    await search(root, +document.getElementById('bst-val').value);
+    busy = false;
 }
 
-async function inorderTraverse(node, list) {
-    if (!node) return;
-    await inorderTraverse(node.left, list);
-
-    // Pastel pink for traversal
-    drawCircle(node, '#ffc2d1');
-    list.push(node.val);
-    await new Promise(r => setTimeout(r, 400));
-
-    await inorderTraverse(node.right, list);
+async function inorder(n, list) {
+    if (!n) return;
+    await inorder(n.l, list);
+    circle(n, '#ffc2d1');
+    list.push(n.v);
+    await new Promise(r=>setTimeout(r,300));
+    await inorder(n.r, list);
 }
 
 async function bstInorder() {
-    drawTree();
+    draw();
     let list = [];
-    await inorderTraverse(bstRoot, list);
-    logBST(`Inorder: ${list.join(' -> ')}`);
-}
-
-function bstClear() {
-    bstRoot = null;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    logBST('Tree Cleared');
-}
-
-function logBST(msg) {
-    document.getElementById('bst-message').innerText = msg;
+    await inorder(root, list);
+    document.getElementById('bst-message').innerText =
+        `Inorder: ${list.join(' -> ')}`;
 }
 
 window.onload = () => {
     canvas = document.getElementById('bst-canvas');
-    if (canvas) ctx = canvas.getContext('2d');
+    ctx = canvas.getContext('2d');
 };
