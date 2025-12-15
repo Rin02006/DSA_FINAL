@@ -1,304 +1,518 @@
-/* =========================================
-   FINAL FIXED script.js
-   Data Structures, Algorithms, BST (Girly Theme)
-   ========================================= */
+/* =========================
+   1. ARRAY & BINARY SEARCH
+========================= */
 
-/* =========================================
-   PART 1: ARRAY + BINARY SEARCH
-   ========================================= */
-let myArray = [];
+let arrayData = [10, 20, 30];
 
 function renderArray() {
-    const c = document.getElementById('array-visual');
-    c.innerHTML = '';
-    myArray.forEach(v => {
-        const d = document.createElement('div');
-        d.className = 'data-item';
-        d.innerText = v;
-        c.appendChild(d);
+    const visual = document.getElementById("array-visual");
+    visual.innerHTML = "";
+    arrayData.forEach(val => {
+        const box = document.createElement("div");
+        box.className = "data-item";
+        box.innerText = val;
+        visual.appendChild(box);
     });
 }
+renderArray();
 
 function arrayInsert() {
-    const i = document.getElementById('array-input');
-    if (!i.value) return alert("Enter value");
-    myArray.push(Number(i.value));
-    i.value = '';
+    const input = document.getElementById("array-input");
+    const value = Number(input.value);
+    if (isNaN(value)) return;
+
+    arrayData.push(value);
     renderArray();
+    document.getElementById("array-message").innerText = "Inserted: " + value;
+    input.value = "";
 }
 
 function arrayDelete() {
-    const i = document.getElementById('array-input');
-    const idx = myArray.indexOf(Number(i.value));
-    if (idx === -1) return alert("Not found");
-    myArray.splice(idx, 1);
-    i.value = '';
+    const input = document.getElementById("array-input");
+    const value = Number(input.value);
+    const index = arrayData.indexOf(value);
+
+    if (index === -1) {
+        document.getElementById("array-message").innerText = "Value not found";
+        return;
+    }
+
+    arrayData.splice(index, 1);
     renderArray();
+    document.getElementById("array-message").innerText = "Deleted: " + value;
+    input.value = "";
 }
 
 function runBinarySearch() {
-    const t = Number(document.getElementById('bs-input').value);
-    if (isNaN(t)) return alert("Enter number");
+    const target = Number(document.getElementById("bs-input").value);
+    const sorted = [...arrayData].sort((a, b) => a - b);
 
-    myArray.sort((a, b) => a - b);
-    renderArray();
-
-    let l = 0, r = myArray.length - 1;
-    while (l <= r) {
-        let m = Math.floor((l + r) / 2);
-        if (myArray[m] === t) return alert("Found!");
-        myArray[m] < t ? l = m + 1 : r = m - 1;
+    let low = 0, high = sorted.length - 1;
+    while (low <= high) {
+        let mid = Math.floor((low + high) / 2);
+        if (sorted[mid] === target) {
+            document.getElementById("array-message").innerText =
+                `Found ${target} at index ${mid} (sorted array)`;
+            return;
+        }
+        sorted[mid] < target ? low++ : high--;
     }
-    alert("Not found");
+    document.getElementById("array-message").innerText = "Not found";
 }
 
-/* =========================================
-   PART 2: STACK
-   ========================================= */
+/* =========================
+   2. STACK (LEFT → RIGHT)
+========================= */
+
+const MAX_SIZE = 5;
 let stack = [];
-const MAX_STACK = 5;
 
 function renderStack() {
-    const c = document.getElementById('stack-visual');
-    c.innerHTML = '';
-    [...stack].reverse().forEach(v => {
-        const d = document.createElement('div');
-        d.className = 'data-item';
-        d.innerText = v;
-        c.appendChild(d);
+    const visual = document.getElementById("stack-visual");
+    visual.innerHTML = "";
+    stack.forEach(item => {
+        const box = document.createElement("div");
+        box.className = "data-item";
+        box.innerText = item;
+        visual.appendChild(box);
     });
 }
 
 function stackPush() {
-    if (stack.length >= MAX_STACK) return alert("Stack Overflow");
-    const i = document.getElementById('stack-input');
-    if (!i.value) return;
-    stack.push(i.value);
-    i.value = '';
+    const input = document.getElementById("stack-input");
+    const value = input.value.trim();
+    if (!value) return;
+
+    if (stack.length >= MAX_SIZE) {
+        document.getElementById("stack-message").innerText = "Stack Overflow!";
+        return;
+    }
+
+    stack.push(value);
     renderStack();
+    document.getElementById("stack-message").innerText = "Pushed: " + value;
+    input.value = "";
 }
 
 function stackPop() {
-    if (!stack.length) return alert("Stack Underflow");
-    stack.pop();
+    if (stack.length === 0) {
+        document.getElementById("stack-message").innerText = "Stack Underflow!";
+        return;
+    }
+
+    const removed = stack.pop();
     renderStack();
+    document.getElementById("stack-message").innerText = "Popped: " + removed;
 }
 
 function stackPeek() {
-    alert(stack.length ? stack[stack.length - 1] : "Stack Empty");
+    if (stack.length === 0) {
+        document.getElementById("stack-message").innerText = "Stack is empty";
+        return;
+    }
+    document.getElementById("stack-message").innerText =
+        "Top element: " + stack[stack.length - 1];
 }
 
-/* =========================================
-   PART 3: QUEUE
-   ========================================= */
+function stackDisplay() {
+    document.getElementById("stack-message").innerText =
+        "Stack: " + stack.join(", ");
+}
+
+/* =========================
+   3. QUEUE (FIFO)
+========================= */
+
 let queue = [];
 
 function renderQueue() {
-    const c = document.getElementById('queue-visual');
-    c.innerHTML = '';
-    queue.forEach(v => {
-        const d = document.createElement('div');
-        d.className = 'data-item';
-        d.innerText = v;
-        c.appendChild(d);
+    const visual = document.getElementById("queue-visual");
+    visual.innerHTML = "";
+    queue.forEach(item => {
+        const box = document.createElement("div");
+        box.className = "data-item";
+        box.innerText = item;
+        visual.appendChild(box);
     });
 }
 
 function queueEnqueue() {
-    const i = document.getElementById('queue-input');
-    if (!i.value) return;
-    queue.push(i.value);
-    i.value = '';
+    const input = document.getElementById("queue-input");
+    const value = input.value.trim();
+    if (!value) return;
+
+    queue.push(value);
     renderQueue();
+    input.value = "";
 }
 
 function queueDequeue() {
-    if (!queue.length) return alert("Queue Empty");
+    if (queue.length === 0) return;
     queue.shift();
     renderQueue();
 }
 
-/* =========================================
-   PART 4: ALGORITHMS (RUN BUTTONS)
-   ========================================= */
-function runAlgo(id) {
-    const out = document.getElementById(`output-${id}`);
-    out.innerText = "Running...";
+/* =========================
+   4 & 5. BST VISUALIZATION
+========================= */
 
-    setTimeout(() => {
-        switch (id) {
-            case 1: {
-                let a = +prompt("A"), b = +prompt("B");
-                out.innerText = `Sum: ${a + b}`; break;
-            }
-            case 2: {
-                let n = +prompt("Number");
-                out.innerText = n % 2 === 0 ? "Even" : "Odd"; break;
-            }
-            case 3: {
-                let a = +prompt("A"), b = +prompt("B"), c = +prompt("C");
-                out.innerText = `Max: ${Math.max(a, b, c)}`; break;
-            }
-            case 4: {
-                let f = +prompt("Number"), fact = 1;
-                for (let i = 1; i <= f; i++) fact *= i;
-                out.innerText = `Factorial: ${fact}`; break;
-            }
-            case 5: {
-                let t = +prompt("Terms"), arr = [0, 1];
-                for (let i = 2; i < t; i++) arr.push(arr[i - 1] + arr[i - 2]);
-                out.innerText = arr.slice(0, t).join(", "); break;
-            }
-            case 6: {
-                let p = +prompt("Number"), prime = p > 1;
-                for (let i = 2; i < p; i++) if (p % i === 0) prime = false;
-                out.innerText = prime ? "Prime" : "Not Prime"; break;
-            }
-            case 7: {
-                let a = prompt("A"), b = prompt("B");
-                out.innerText = `A=${b}, B=${a}`; break;
-            }
-            case 8: {
-                let t = +prompt("Find in [10,20,30]");
-                out.innerText = [10, 20, 30].includes(t) ? "Found" : "Not Found"; break;
-            }
-            case 9: {
-                let s = prompt("String");
-                out.innerText = s.split('').reverse().join(''); break;
-            }
-            case 10: {
-                let r = +prompt("Radius");
-                out.innerText = `Area: ${(Math.PI * r * r).toFixed(2)}`; break;
-            }
-        }
-    }, 200);
-}
-function runPseudo(id) { runAlgo(id); }
+const canvas = document.getElementById("bst-canvas");
+const ctx = canvas.getContext("2d");
 
-/* =========================================
-   PART 5: INFIX → POSTFIX / PREFIX
-   ========================================= */
-function prec(o) { return { '+':1,'-':1,'*':2,'/':2,'^':3 }[o] || 0; }
+let bstRoot = null;
+let animationRunning = false;
 
-function infixToPostfix(exp) {
-    let s = [], out = '';
-    for (let c of exp.replace(/\s+/g,'')) {
-        if (/[a-zA-Z0-9]/.test(c)) out += c;
-        else if (c === '(') s.push(c);
-        else if (c === ')') {
-            while (s.length && s.at(-1) !== '(') out += s.pop();
-            s.pop();
-        } else {
-            while (s.length && prec(s.at(-1)) >= prec(c)) out += s.pop();
-            s.push(c);
-        }
-    }
-    while (s.length) out += s.pop();
-    return out;
+function BSTNode(val) {
+    this.val = val;
+    this.left = null;
+    this.right = null;
+    this.x = 0;
+    this.y = 0;
+    this.visited = false;
+    this.highlight = false;
 }
 
-function infixToPrefix(exp) {
-    let r = [...exp].reverse().map(c => c === '(' ? ')' : c === ')' ? '(' : c).join('');
-    return [...infixToPostfix(r)].reverse().join('');
-}
-
-function convertExpression() {
-    const i = document.getElementById('infix-input').value;
-    document.getElementById('out-postfix').innerText = infixToPostfix(i);
-    document.getElementById('out-prefix').innerText = infixToPrefix(i);
-}
-
-/* =========================================
-   PART 6: BST (PINK THEME)
-   ========================================= */
-let canvas, ctx, root = null, busy = false;
-
-class Node {
-    constructor(v, x, y) {
-        this.v = v; this.x = x; this.y = y;
-        this.l = null; this.r = null;
-    }
-}
-
-function insert(n, v, x, y, l) {
-    if (!n) return new Node(v, x, y);
-    const o = 180 / l;
-    v < n.v ? n.l = insert(n.l, v, x - o, y + 60, l + 1)
-            : n.r = insert(n.r, v, x + o, y + 60, l + 1);
-    return n;
+function insertBST(node, val) {
+    if (!node) return new BSTNode(val);
+    if (val < node.val) node.left = insertBST(node.left, val);
+    else node.right = insertBST(node.right, val);
+    return node;
 }
 
 function bstInsert() {
-    const v = +document.getElementById('bst-val').value;
-    if (isNaN(v)) return;
-    root = insert(root, v, canvas.width / 2, 50, 1);
-    draw();
+    const value = Number(document.getElementById("bst-val").value);
+    if (isNaN(value)) return;
+
+    bstRoot = insertBST(bstRoot, value);
+    clearStates(bstRoot);
+    drawTree();
+    document.getElementById("bst-message").innerText = "Inserted: " + value;
 }
 
-function draw() {
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    if (root) drawNode(root);
+/* ===== SEARCH WITH PINK ANIMATION ===== */
+
+async function bstSearch() {
+    if (animationRunning) return;
+    animationRunning = true;
+
+    clearStates(bstRoot);
+    const value = Number(document.getElementById("bst-val").value);
+    let node = bstRoot;
+
+    while (node) {
+        node.highlight = true;
+        drawTree();
+        await sleep(600);
+
+        if (node.val === value) {
+            node.visited = true;
+            drawTree();
+            document.getElementById("bst-message").innerText = "Found: " + value;
+            animationRunning = false;
+            return;
+        }
+
+        node.highlight = false;
+        node = value < node.val ? node.left : node.right;
+    }
+
+    drawTree();
+    document.getElementById("bst-message").innerText = "Not found";
+    animationRunning = false;
 }
 
-function drawNode(n) {
-    if (n.l) { line(n,n.l); drawNode(n.l); }
-    if (n.r) { line(n,n.r); drawNode(n.r); }
-    circle(n, '#ff9a9e');
+/* ===== TRAVERSALS WITH PINK STAY ===== */
+
+async function bstInorder() {
+    if (animationRunning) return;
+    animationRunning = true;
+
+    clearStates(bstRoot);
+    await inorderAnim(bstRoot);
+    drawTree();
+    animationRunning = false;
 }
 
-function line(a,b) {
-    ctx.strokeStyle = '#f4a6c1';
+async function bstPreorder() {
+    if (animationRunning) return;
+    animationRunning = true;
+
+    clearStates(bstRoot);
+    await preorderAnim(bstRoot);
+    drawTree();
+    animationRunning = false;
+}
+
+async function bstPostorder() {
+    if (animationRunning) return;
+    animationRunning = true;
+
+    clearStates(bstRoot);
+    await postorderAnim(bstRoot);
+    drawTree();
+    animationRunning = false;
+}
+
+async function inorderAnim(node) {
+    if (!node) return;
+    await inorderAnim(node.left);
+    node.visited = true;
+    drawTree();
+    await sleep(600);
+    await inorderAnim(node.right);
+}
+
+async function preorderAnim(node) {
+    if (!node) return;
+    node.visited = true;
+    drawTree();
+    await sleep(600);
+    await preorderAnim(node.left);
+    await preorderAnim(node.right);
+}
+
+async function postorderAnim(node) {
+    if (!node) return;
+    await postorderAnim(node.left);
+    await postorderAnim(node.right);
+    node.visited = true;
+    drawTree();
+    await sleep(600);
+}
+
+/* ===== TREE DRAWING (BIGGER CIRCLES & TEXT) ===== */
+
+function drawTree() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    calculatePositions(bstRoot, canvas.width / 2, 50, canvas.width / 4);
+    drawConnections(bstRoot);
+    drawNodes(bstRoot);
+}
+
+function calculatePositions(node, x, y, gap) {
+    if (!node) return;
+    node.x = x;
+    node.y = y;
+    calculatePositions(node.left, x - gap, y + 90, gap / 2);
+    calculatePositions(node.right, x + gap, y + 90, gap / 2);
+}
+
+function drawConnections(node) {
+    if (!node) return;
+    if (node.left) drawLine(node, node.left);
+    if (node.right) drawLine(node, node.right);
+    drawConnections(node.left);
+    drawConnections(node.right);
+}
+
+function drawLine(p, c) {
     ctx.beginPath();
-    ctx.moveTo(a.x,a.y);
-    ctx.lineTo(b.x,b.y);
+    ctx.moveTo(p.x, p.y);
+    ctx.lineTo(c.x, c.y);
+    ctx.strokeStyle = "#a18cd1";
+    ctx.lineWidth = 2;
     ctx.stroke();
 }
 
-function circle(n,c) {
-    ctx.fillStyle=c;
+function drawNodes(node) {
+    if (!node) return;
+    drawCircle(node);
+    drawNodes(node.left);
+    drawNodes(node.right);
+}
+
+/* ===== BIGGER BST NODE DESIGN ===== */
+
+function drawCircle(node) {
     ctx.beginPath();
-    ctx.arc(n.x,n.y,20,0,Math.PI*2);
-    ctx.fill(); ctx.stroke();
-    ctx.fillStyle='white';
-    ctx.textAlign='center';
-    ctx.textBaseline='middle';
-    ctx.fillText(n.v,n.x,n.y);
+    ctx.arc(node.x, node.y, 26, 0, Math.PI * 2); // ⬅ BIGGER CIRCLE
+
+    if (node.visited || node.highlight)
+        ctx.fillStyle = "#ff9a9e";
+    else
+        ctx.fillStyle = "#b56576";
+
+    ctx.fill();
+    ctx.strokeStyle = "#6d597a";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 16px Arial"; // ⬅ BIGGER NUMBER
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(node.val, node.x, node.y);
 }
 
-async function search(n,v) {
-    if (!n) return false;
-    circle(n,'#f7b2cc');
-    await new Promise(r=>setTimeout(r,400));
-    if (n.v === v) { circle(n,'#ff6f91'); return true; }
-    return v < n.v ? search(n.l,v) : search(n.r,v);
+/* ===== HELPERS ===== */
+
+function clearStates(node) {
+    if (!node) return;
+    node.visited = false;
+    node.highlight = false;
+    clearStates(node.left);
+    clearStates(node.right);
 }
 
-async function bstSearch() {
-    if (busy) return;
-    busy = true;
-    draw();
-    await search(root, +document.getElementById('bst-val').value);
-    busy = false;
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function inorder(n, list) {
-    if (!n) return;
-    await inorder(n.l, list);
-    circle(n, '#ffc2d1');
-    list.push(n.v);
-    await new Promise(r=>setTimeout(r,300));
-    await inorder(n.r, list);
+function bstClear() {
+    bstRoot = null;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    document.getElementById("bst-message").innerText = "Tree cleared";
+        } 
+/* =====================================================
+   FIX SECTION – REQUIRED FOR ALGORITHMS & EXPRESSIONS
+===================================================== */
+
+/* ---------- FIX 1: RUN BUTTON (algorithms.html) ---------- */
+function runAlgo(id) {
+    const out = document.getElementById(`output-${id}`);
+    if (!out) return;
+
+    switch (id) {
+        case 1: {
+            let a = +prompt("Enter A:");
+            let b = +prompt("Enter B:");
+            out.innerText = "Sum = " + (a + b);
+            break;
+        }
+        case 2: {
+            let n = +prompt("Enter number:");
+            out.innerText = n % 2 === 0 ? "Even" : "Odd";
+            break;
+        }
+        case 3: {
+            let a = +prompt("A:"), b = +prompt("B:"), c = +prompt("C:");
+            out.innerText = "Max = " + Math.max(a, b, c);
+            break;
+        }
+        case 4: {
+            let n = +prompt("Enter number:");
+            let f = 1;
+            for (let i = 1; i <= n; i++) f *= i;
+            out.innerText = "Factorial = " + f;
+            break;
+        }
+        case 5: {
+            let t = +prompt("Terms:");
+            let fib = [0, 1];
+            for (let i = 2; i < t; i++)
+                fib.push(fib[i - 1] + fib[i - 2]);
+            out.innerText = fib.slice(0, t).join(", ");
+            break;
+        }
+        case 6: {
+            let n = +prompt("Enter number:");
+            let prime = n > 1;
+            for (let i = 2; i < n; i++)
+                if (n % i === 0) prime = false;
+            out.innerText = prime ? "Prime" : "Not Prime";
+            break;
+        }
+        case 7: {
+            let a = prompt("A:"), b = prompt("B:");
+            out.innerText = `A=${b}, B=${a}`;
+            break;
+        }
+        case 8: {
+            let t = +prompt("Find in [10,20,30]:");
+            out.innerText = [10,20,30].includes(t) ? "Found" : "Not Found";
+            break;
+        }
+        case 9: {
+            let s = prompt("Enter string:");
+            out.innerText = s.split("").reverse().join("");
+            break;
+        }
+        case 10: {
+            let r = +prompt("Radius:");
+            out.innerText = "Area = " + (Math.PI * r * r).toFixed(2);
+            break;
+        }
+    }
 }
 
-async function bstInorder() {
-    draw();
-    let list = [];
-    await inorder(root, list);
-    document.getElementById('bst-message').innerText =
-        `Inorder: ${list.join(' -> ')}`;
+function runPseudo(id) {
+    runAlgo(id);
 }
 
-window.onload = () => {
-    canvas = document.getElementById('bst-canvas');
-    ctx = canvas.getContext('2d');
+/* ---------- FIX 2: INFIX → POSTFIX / PREFIX ---------- */
+function precedence(op) {
+    if (op === "+" || op === "-") return 1;
+    if (op === "*" || op === "/") return 2;
+    if (op === "^") return 3;
+    return 0;
+}
+
+function infixToPostfix(exp) {
+    let stack = [];
+    let result = "";
+
+    for (let ch of exp.replace(/\s+/g, "")) {
+        if (/[a-zA-Z0-9]/.test(ch)) {
+            result += ch;
+        } else if (ch === "(") {
+            stack.push(ch);
+        } else if (ch === ")") {
+            while (stack.length && stack.at(-1) !== "(")
+                result += stack.pop();
+            stack.pop();
+        } else {
+            while (stack.length && precedence(stack.at(-1)) >= precedence(ch))
+                result += stack.pop();
+            stack.push(ch);
+        }
+    }
+    while (stack.length) result += stack.pop();
+    return result;
+}
+
+function infixToPrefix(exp) {
+    let rev = [...exp].reverse()
+        .map(c => c === "(" ? ")" : c === ")" ? "(" : c)
+        .join("");
+    return [...infixToPostfix(rev)].reverse().join("");
+}
+
+function convertExpression() {
+    const input = document.getElementById("infix-input").value;
+    if (!input) return alert("Enter infix expression");
+
+    document.getElementById("out-postfix").innerText =
+        infixToPostfix(input);
+    document.getElementById("out-prefix").innerText =
+        infixToPrefix(input);
+}
+
+/* ---------- FIX 3: FORCE GIRLY BST COLORS ---------- */
+drawLine = function (p, c) {
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+    ctx.lineTo(c.x, c.y);
+    ctx.strokeStyle = "#f4a6c1"; // 🌸 pink lines
+    ctx.lineWidth = 2;
+    ctx.stroke();
 };
+
+drawCircle = function (node) {
+    ctx.beginPath();
+    ctx.arc(node.x, node.y, 26, 0, Math.PI * 2);
+
+    ctx.fillStyle =
+        node.visited || node.highlight ? "#ff9a9e" : "#ffc2d1";
+
+    ctx.fill();
+    ctx.strokeStyle = "#ff6f91"; // 💗 pink border
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 16px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(node.val, node.x, node.y);
+};
+
