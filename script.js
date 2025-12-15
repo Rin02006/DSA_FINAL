@@ -352,6 +352,13 @@ function drawNode(node) {
         drawLine(node, node.right);
         drawNode(node.right);
     }
+    // Default girly pink node
+    drawCircle(node, '#ff9a9e');
+}
+    if (node.right) {
+        drawLine(node, node.right);
+        drawNode(node.right);
+    }
     drawCircle(node, '#ff9a9e');
 }
 
@@ -378,12 +385,21 @@ function drawCircle(node, color) {
 
 async function searchNode(node, val) {
     if (!node) return false;
-    drawCircle(node, 'yellow');
+
+    // Soft pink highlight while traversing
+    drawCircle(node, '#f7b2cc');
     await new Promise(r => setTimeout(r, 500));
+
     if (node.val === val) {
-        drawCircle(node, '#27c93f');
+        // Stronger pink when found
+        drawCircle(node, '#ff6f91');
         return true;
     }
+
+    return val < node.val
+        ? await searchNode(node.left, val)
+        : await searchNode(node.right, val);
+}
     return val < node.val
         ? await searchNode(node.left, val)
         : await searchNode(node.right, val);
@@ -400,9 +416,12 @@ async function bstSearch() {
 async function inorderTraverse(node, list) {
     if (!node) return;
     await inorderTraverse(node.left, list);
-    drawCircle(node, '#00ccff');
+
+    // Pastel pink for traversal
+    drawCircle(node, '#ffc2d1');
     list.push(node.val);
     await new Promise(r => setTimeout(r, 400));
+
     await inorderTraverse(node.right, list);
 }
 
