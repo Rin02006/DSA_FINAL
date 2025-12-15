@@ -278,4 +278,20 @@ footer {
 /* Prevent content from escaping vertically */
 .demo-box pre {
     max-height: 220px;
+}   
+/* ===================================================
+   ✅ STACK VISUAL – HORIZONTAL PUSH (LIFO)
+   =================================================== */
+
+#stack-visual {
+    flex-direction: row;       /* horizontal layout */
+    justify-content: flex-start;
+    align-items: center;
 }
+
+/* New items appear on the RIGHT (top of stack) */
+#stack-visual .data-item {
+    order: 999;                /* forces latest push to the end */
+}
+
+
