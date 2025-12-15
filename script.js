@@ -1,365 +1,214 @@
-/* =========================
-   1. ARRAY & BINARY SEARCH
-========================= */
-
-let arrayData = [];
-
-function renderArray() {
-    const visual = document.getElementById("array-visual");
-    if (!visual) return;
-    visual.innerHTML = "";
-    arrayData.forEach(val => {
-        const box = document.createElement("div");
-        box.className = "data-item";
-        box.innerText = val;
-        visual.appendChild(box);
-    });
+/* --- GIRLY TECH THEME VARIABLES --- */
+:root {
+    /* Soft Pink to Peach Gradient */
+    --primary-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+    /* Lavender to Blue Gradient */
+    --secondary-gradient: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+    /* Text Colors */
+    --text-dark: #4a4e69;
+    --text-light: #9a8c98;
+    /* Background */
+    --bg-color: #fffdfd;
 }
 
-function arrayInsert() {
-    const input = document.getElementById("array-input");
-    const value = Number(input.value);
-    if (isNaN(value)) return;
-
-    arrayData.push(value);
-    renderArray();
-    document.getElementById("array-message").innerText = `Inserted: ${value}`;
-    input.value = "";
+body {
+    padding-top: 70px; /* keep navbar space */
+    background-color: var(--bg-color);
+    font-family: 'Quicksand', sans-serif; 
+    color: var(--text-dark);
+    background-image: radial-gradient(#fecfef 1px, transparent 1px);
+    background-size: 20px 20px;
 }
 
-function arrayDelete() {
-    const input = document.getElementById("array-input");
-    const value = Number(input.value);
-    const index = arrayData.indexOf(value);
+/* ==================================
+   GLOBAL PADDING FIX (SAFE)
+================================== */
 
-    if (index === -1) {
-        document.getElementById("array-message").innerText = "Value not found";
-        return;
-    }
-
-    arrayData.splice(index, 1);
-    renderArray();
-    document.getElementById("array-message").innerText = `Deleted: ${value}`;
-    input.value = "";
+/* Make all main sections even */
+.container {
+    padding-top: 40px;
+    padding-bottom: 40px;
 }
 
-function runBinarySearch() {
-    const target = Number(document.getElementById("bs-input").value);
-    if (isNaN(target)) return;
-
-    const sorted = [...arrayData].sort((a, b) => a - b);
-    let low = 0, high = sorted.length - 1;
-
-    while (low <= high) {
-        const mid = Math.floor((low + high) / 2);
-        if (sorted[mid] === target) {
-            document.getElementById("array-message").innerText =
-                `Found ${target} at index ${mid} (sorted array)`;
-            return;
-        }
-        sorted[mid] < target ? low++ : high--;
-    }
-    document.getElementById("array-message").innerText = "Not found";
+/* --- NAVBAR --- */
+.navbar {
+    background: var(--secondary-gradient) !important;
+    box-shadow: 0 4px 20px rgba(251, 194, 235, 0.4);
+    padding: 15px 0;
+    backdrop-filter: blur(10px);
+}
+.navbar-brand {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.nav-link {
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+.nav-link:hover {
+    color: #fff !important;
+    transform: translateY(-2px);
+    text-shadow: 0 0 8px rgba(255,255,255,0.8);
 }
 
-/* =========================
-   2. STACK
-========================= */
-
-const MAX_SIZE = 5;
-let stack = [];
-
-function renderStack() {
-    const visual = document.getElementById("stack-visual");
-    if (!visual) return;
-    visual.innerHTML = "";
-    stack.forEach(item => {
-        const box = document.createElement("div");
-        box.className = "data-item";
-        box.innerText = item;
-        visual.appendChild(box);
-    });
+/* --- HEADINGS --- */
+h1, h2, h3, h5 {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 800;
+    color: var(--text-dark);
 }
 
-function stackPush() {
-    const input = document.getElementById("stack-input");
-    const value = input.value.trim();
-    if (!value) return;
-
-    if (stack.length >= MAX_SIZE) {
-        document.getElementById("stack-message").innerText = "Stack Overflow!";
-        return;
-    }
-
-    stack.push(value);
-    renderStack();
-    document.getElementById("stack-message").innerText = `Pushed: ${value}`;
-    input.value = "";
+.section-title {
+    position: relative;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    color: #6d597a;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.section-title::after {
+    content: '❤';
+    position: absolute;
+    font-size: 12px;
+    color: #ff9a9e;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
-function stackPop() {
-    if (stack.length === 0) {
-        document.getElementById("stack-message").innerText = "Stack Underflow!";
-        return;
-    }
-
-    const removed = stack.pop();
-    renderStack();
-    document.getElementById("stack-message").innerText = `Popped: ${removed}`;
+/* --- HERO SECTION --- */
+header {
+    background: var(--secondary-gradient);
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+    box-shadow: 0 10px 30px rgba(161, 140, 209, 0.3);
 }
 
-/* =========================
-   3. QUEUE
-========================= */
+/* --- CARDS & BOXES --- */
+.card,
+.demo-box,
+.member-card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(255, 154, 158, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 
-let queue = [];
-
-function renderQueue() {
-    const visual = document.getElementById("queue-visual");
-    if (!visual) return;
-    visual.innerHTML = "";
-    queue.forEach(item => {
-        const box = document.createElement("div");
-        box.className = "data-item";
-        box.innerText = item;
-        visual.appendChild(box);
-    });
+    /* FIX: normalize inner spacing */
+    padding: 20px;
 }
 
-function queueEnqueue() {
-    const input = document.getElementById("queue-input");
-    const value = input.value.trim();
-    if (!value) return;
-
-    queue.push(value);
-    renderQueue();
-    input.value = "";
+.card:hover,
+.member-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(161, 140, 209, 0.3);
 }
 
-function queueDequeue() {
-    if (queue.length === 0) return;
-    queue.shift();
-    renderQueue();
+/* --- BUTTONS --- */
+.btn {
+    border-radius: 50px;
+    padding: 10px 25px;
+    font-weight: 700;
+    font-family: 'Raleway', sans-serif;
+    border: none;
+    transition: all 0.3s;
+}
+.btn-primary { background: var(--primary-gradient); color: #fff; }
+.btn-light { background: white; color: #a18cd1; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+.btn-outline-light:hover { background: white; color: #ff9a9e; }
+
+/* --- CUTE CODE EDITOR DESIGN --- */
+.code-window {
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 25px;
+    border: none;
+    box-shadow: 0 15px 35px rgba(161, 140, 209, 0.4);
+    transition: transform 0.3s ease;
+}
+.code-window:hover { transform: translateY(-5px); }
+
+.code-header {
+    background: var(--secondary-gradient);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
 }
 
-/* =========================
-   4. BST VISUALIZATION
-========================= */
+.window-dots { display: flex; gap: 8px; margin-right: 15px; }
+.dot { width: 12px; height: 12px; border-radius: 50%; }
+.dot.red { background-color: #ff8fa3; }
+.dot.yellow { background-color: #ffe66d; }
+.dot.green { background-color: #80ed99; }
 
-const canvas = document.getElementById("bst-canvas");
-const ctx = canvas ? canvas.getContext("2d") : null;
-
-let bstRoot = null;
-let animationRunning = false;
-
-function BSTNode(val) {
-    this.val = val;
-    this.left = null;
-    this.right = null;
-    this.x = 0;
-    this.y = 0;
-    this.visited = false;
-    this.highlight = false;
+.lang-label {
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-left: auto;
+    text-transform: uppercase;
+    opacity: 0.9;
 }
 
-function insertBST(node, val) {
-    if (!node) return new BSTNode(val);
-    if (val < node.val) node.left = insertBST(node.left, val);
-    else node.right = insertBST(node.right, val);
-    return node;
+.code-input {
+    width: 100%;
+    min-height: 250px;
+    background-color: #232136;
+    color: #e0def4;
+    border: none;
+    padding: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    resize: vertical;
+    outline: none;
+    line-height: 1.5;
 }
 
-function bstInsert() {
-    const value = Number(document.getElementById("bst-val").value);
-    if (isNaN(value)) return;
+/* --- Visual Containers --- */
+.visual-container {
+    min-height: 80px;
 
-    bstRoot = insertBST(bstRoot, value);
-    clearStates(bstRoot);
-    drawTree();
-    document.getElementById("bst-message").innerText = `Inserted: ${value}`;
+    /* FIX: balanced vertical spacing */
+    margin-top: 15px;
+    margin-bottom: 15px;
+
+    padding: 15px;
+    background-color: rgba(255,255,255,0.6);
+    border: 2px dashed #ff9a9e;
+    border-radius: 10px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
-/* ===== BST SEARCH ===== */
-
-async function bstSearch() {
-    if (animationRunning || !bstRoot) return;
-    animationRunning = true;
-
-    clearStates(bstRoot);
-    const value = Number(document.getElementById("bst-val").value);
-    let node = bstRoot;
-
-    while (node) {
-        node.highlight = true;
-        drawTree();
-        await sleep(600);
-
-        if (node.val === value) {
-            node.visited = true;
-            drawTree();
-            document.getElementById("bst-message").innerText = `Found: ${value}`;
-            animationRunning = false;
-            return;
-        }
-
-        node.highlight = false;
-        node = value < node.val ? node.left : node.right;
-    }
-
-    drawTree();
-    document.getElementById("bst-message").innerText = "Not found";
-    animationRunning = false;
+#stack-visual {
+    flex-direction: column-reverse;
 }
 
-/* ===== DRAWING ===== */
-
-function drawTree() {
-    if (!ctx) return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    calculatePositions(bstRoot, canvas.width / 2, 40, canvas.width / 4);
-    drawConnections(bstRoot);
-    drawNodes(bstRoot);
+.data-item {
+    background: var(--primary-gradient);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-family: 'JetBrains Mono', monospace;
+    animation: popIn 0.3s;
 }
 
-function calculatePositions(node, x, y, gap) {
-    if (!node) return;
-    node.x = x;
-    node.y = y;
-    calculatePositions(node.left, x - gap, y + 70, gap / 2);
-    calculatePositions(node.right, x + gap, y + 70, gap / 2);
+@keyframes popIn {
+    0% { opacity: 0; transform: scale(0.5); }
+    100% { opacity: 1; transform: scale(1); }
 }
 
-function drawConnections(node) {
-    if (!node) return;
-    if (node.left) drawLine(node, node.left);
-    if (node.right) drawLine(node, node.right);
-    drawConnections(node.left);
-    drawConnections(node.right);
-}
-
-function drawLine(p, c) {
-    ctx.beginPath();
-    ctx.moveTo(p.x, p.y);
-    ctx.lineTo(c.x, c.y);
-    ctx.strokeStyle = "#a18cd1";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-}
-
-function drawNodes(node) {
-    if (!node) return;
-    drawCircle(node);
-    drawNodes(node.left);
-    drawNodes(node.right);
-}
-
-function drawCircle(node) {
-    ctx.beginPath();
-    ctx.arc(node.x, node.y, 20, 0, Math.PI * 2); // ✅ radius 20
-
-    ctx.fillStyle = node.visited || node.highlight ? "#ff9a9e" : "#b56576";
-    ctx.fill();
-    ctx.strokeStyle = "#6d597a";
-    ctx.stroke();
-
-    ctx.fillStyle = "#fff";
-    ctx.font = "bold 14px Arial"; // ✅ font size 14
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(node.val, node.x, node.y);
-}
-
-function clearStates(node) {
-    if (!node) return;
-    node.visited = false;
-    node.highlight = false;
-    clearStates(node.left);
-    clearStates(node.right);
-}
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function bstClear() {
-    bstRoot = null;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    document.getElementById("bst-message").innerText = "Tree cleared";
-}
-
-/* =========================
-   5. ALGORITHMS (algorithm.html)
-========================= */
-
-function runAlgo(id) {
-    const outputBox = document.getElementById(`output-${id}`);
-    if (!outputBox) return;
-
-    outputBox.innerText = "Running...";
-
-    setTimeout(() => {
-        switch (id) {
-            case 1: {
-                const a = prompt("Enter first number:");
-                const b = prompt("Enter second number:");
-                outputBox.innerText = a && b ? `Sum: ${Number(a) + Number(b)}` : "Cancelled";
-                break;
-            }
-            case 2: {
-                const n = prompt("Enter number:");
-                outputBox.innerText = n ? `${n} is ${n % 2 === 0 ? "Even" : "Odd"}` : "Cancelled";
-                break;
-            }
-            case 3: {
-                const a = prompt("a:"), b = prompt("b:"), c = prompt("c:");
-                outputBox.innerText = a && b && c ? `Max: ${Math.max(a, b, c)}` : "Cancelled";
-                break;
-            }
-            case 4: {
-                const n = prompt("Enter number:");
-                let f = 1;
-                for (let i = 1; i <= n; i++) f *= i;
-                outputBox.innerText = `Factorial: ${f}`;
-                break;
-            }
-            case 5: {
-                const t = prompt("Terms:");
-                let fib = [0, 1];
-                for (let i = 2; i < t; i++) fib.push(fib[i - 1] + fib[i - 2]);
-                outputBox.innerText = fib.join(", ");
-                break;
-            }
-            case 6: {
-                const n = prompt("Number:");
-                let prime = n > 1;
-                for (let i = 2; i < n; i++) if (n % i === 0) prime = false;
-                outputBox.innerText = prime ? "Prime" : "Not Prime";
-                break;
-            }
-            case 7: {
-                const a = prompt("A:"), b = prompt("B:");
-                outputBox.innerText = `Swapped: A=${b}, B=${a}`;
-                break;
-            }
-            case 8: {
-                const n = prompt("Find (10,20,30):");
-                outputBox.innerText = [10, 20, 30].includes(Number(n)) ? "Found" : "Not Found";
-                break;
-            }
-            case 9: {
-                const s = prompt("String:");
-                outputBox.innerText = s.split("").reverse().join("");
-                break;
-            }
-            case 10: {
-                const r = prompt("Radius:");
-                outputBox.innerText = `Area: ${(Math.PI * r * r).toFixed(2)}`;
-                break;
-            }
-        }
-    }, 200);
-}
-
-function runPseudo(id) {
-    runAlgo(id);
+/* --- FOOTER --- */
+footer {
+    background: linear-gradient(to right, #6d597a, #355070);
+    color: #ffcdb2;
+    padding: 20px;
 }
