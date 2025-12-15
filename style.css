@@ -1,23 +1,19 @@
 /* --- GIRLY TECH THEME VARIABLES --- */
 :root {
-    /* Soft Pink to Peach Gradient */
     --primary-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
-    /* Lavender to Blue Gradient */
     --secondary-gradient: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
-    /* Text Colors */
     --text-dark: #4a4e69;
     --text-light: #9a8c98;
-    /* Background */
     --bg-color: #fffdfd;
 }
 
 body {
     padding-top: 70px;
     background-color: var(--bg-color);
-    font-family: 'Quicksand', sans-serif; 
+    font-family: 'Quicksand', sans-serif;
     color: var(--text-dark);
     background-image: radial-gradient(#fecfef 1px, transparent 1px);
-    background-size: 20px 20px; /* Cute polka dot pattern */
+    background-size: 20px 20px;
 }
 
 /* --- NAVBAR --- */
@@ -143,8 +139,8 @@ header {
 .code-input {
     width: 100%;
     min-height: 250px;
-    background-color: #232136; /* Deep purple background */
-    color: #e0def4; /* Soft white text */
+    background-color: #232136;
+    color: #e0def4;
     border: none;
     padding: 20px;
     font-family: 'JetBrains Mono', monospace;
@@ -154,7 +150,7 @@ header {
     line-height: 1.5;
 }
 
-/* Visual Container for Stack/Queue/Array items */
+/* --- VISUAL CONTAINER --- */
 .visual-container {
     min-height: 80px;
     margin-top: 20px;
@@ -167,7 +163,12 @@ header {
     flex-wrap: wrap;
     align-items: center;
 }
-#stack-visual { flex-direction: column-reverse; } /* Stack logic */
+
+/* ORIGINAL STACK RULE (kept) */
+#stack-visual { 
+    flex-direction: column-reverse;
+}
+
 .data-item {
     background: var(--primary-gradient);
     color: white;
@@ -177,12 +178,34 @@ header {
     font-family: 'JetBrains Mono', monospace;
     animation: popIn 0.3s;
 }
-@keyframes popIn { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }
+
+@keyframes popIn {
+    0% { opacity: 0; transform: scale(0.5); }
+    100% { opacity: 1; transform: scale(1); }
+}
 
 footer {
     background: linear-gradient(to right, #6d597a, #355070);
     color: #ffcdb2;
     padding: 20px;
 }
-Sent
-Write to
+
+/* ==================================================
+   FIXES ONLY – NO THEME / DESIGN CHANGES
+================================================== */
+
+/* FIX 1: STACK HORIZONTAL (LEFT → RIGHT) */
+#stack-visual {
+    flex-direction: row !important;
+}
+
+/* FIX 2: EVEN PADDING FOR ABOUT PAGE */
+.about-section {
+    padding: 40px 40px;
+}
+
+.about-section .card,
+.about-section .member-card,
+.about-section .demo-box {
+    padding: 25px;
+}
