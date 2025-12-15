@@ -278,20 +278,45 @@ footer {
 /* Prevent content from escaping vertically */
 .demo-box pre {
     max-height: 220px;
-}   
+}  
 /* ===================================================
-   ✅ STACK VISUAL – HORIZONTAL PUSH (LIFO)
+   ✅ HARD OVERRIDE: STACK MUST BE HORIZONTAL
    =================================================== */
 
 #stack-visual {
-    flex-direction: row;       /* horizontal layout */
-    justify-content: flex-start;
-    align-items: center;
+    flex-direction: row !important;
+    flex-wrap: nowrap;
+    overflow-x: auto;
 }
 
-/* New items appear on the RIGHT (top of stack) */
+/* Ensure LIFO order visually */
 #stack-visual .data-item {
-    order: 999;                /* forces latest push to the end */
+    order: 999 !important;
+}
+/* ===================================================
+   ✅ PYTHON STATUS / OUTPUT FIX (ALL CASES)
+   =================================================== */
+
+/* Catch waiting / running messages */
+.demo-box p,
+.demo-box .status,
+.demo-box .output,
+.demo-box .python-output,
+.demo-box .run-status {
+    max-width: 100%;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+    overflow-wrap: anywhere;
 }
 
+/* Ensure demo-box grows instead of leaking */
+.demo-box {
+    overflow: hidden;
+}
+
+/* Force vertical stacking inside demo-box */
+.demo-box > * {
+    max-width: 100%;
+}
 
