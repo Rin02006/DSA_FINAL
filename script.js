@@ -2,10 +2,11 @@
    1. ARRAY & BINARY SEARCH
 ========================= */
 
-let arrayData = [10, 20, 30];
+let arrayData = [];
 
 function renderArray() {
     const visual = document.getElementById("array-visual");
+    if (!visual) return;
     visual.innerHTML = "";
     arrayData.forEach(val => {
         const box = document.createElement("div");
@@ -14,7 +15,6 @@ function renderArray() {
         visual.appendChild(box);
     });
 }
-renderArray();
 
 function arrayInsert() {
     const input = document.getElementById("array-input");
@@ -23,7 +23,7 @@ function arrayInsert() {
 
     arrayData.push(value);
     renderArray();
-    document.getElementById("array-message").innerText = "Inserted: " + value;
+    document.getElementById("array-message").innerText = `Inserted: ${value}`;
     input.value = "";
 }
 
@@ -39,17 +39,19 @@ function arrayDelete() {
 
     arrayData.splice(index, 1);
     renderArray();
-    document.getElementById("array-message").innerText = "Deleted: " + value;
+    document.getElementById("array-message").innerText = `Deleted: ${value}`;
     input.value = "";
 }
 
 function runBinarySearch() {
     const target = Number(document.getElementById("bs-input").value);
-    const sorted = [...arrayData].sort((a, b) => a - b);
+    if (isNaN(target)) return;
 
+    const sorted = [...arrayData].sort((a, b) => a - b);
     let low = 0, high = sorted.length - 1;
+
     while (low <= high) {
-        let mid = Math.floor((low + high) / 2);
+        const mid = Math.floor((low + high) / 2);
         if (sorted[mid] === target) {
             document.getElementById("array-message").innerText =
                 `Found ${target} at index ${mid} (sorted array)`;
@@ -61,7 +63,7 @@ function runBinarySearch() {
 }
 
 /* =========================
-   2. STACK (LEFT → RIGHT)
+   2. STACK
 ========================= */
 
 const MAX_SIZE = 5;
@@ -69,6 +71,7 @@ let stack = [];
 
 function renderStack() {
     const visual = document.getElementById("stack-visual");
+    if (!visual) return;
     visual.innerHTML = "";
     stack.forEach(item => {
         const box = document.createElement("div");
@@ -90,7 +93,7 @@ function stackPush() {
 
     stack.push(value);
     renderStack();
-    document.getElementById("stack-message").innerText = "Pushed: " + value;
+    document.getElementById("stack-message").innerText = `Pushed: ${value}`;
     input.value = "";
 }
 
@@ -102,31 +105,18 @@ function stackPop() {
 
     const removed = stack.pop();
     renderStack();
-    document.getElementById("stack-message").innerText = "Popped: " + removed;
-}
-
-function stackPeek() {
-    if (stack.length === 0) {
-        document.getElementById("stack-message").innerText = "Stack is empty";
-        return;
-    }
-    document.getElementById("stack-message").innerText =
-        "Top element: " + stack[stack.length - 1];
-}
-
-function stackDisplay() {
-    document.getElementById("stack-message").innerText =
-        "Stack: " + stack.join(", ");
+    document.getElementById("stack-message").innerText = `Popped: ${removed}`;
 }
 
 /* =========================
-   3. QUEUE (FIFO)
+   3. QUEUE
 ========================= */
 
 let queue = [];
 
 function renderQueue() {
     const visual = document.getElementById("queue-visual");
+    if (!visual) return;
     visual.innerHTML = "";
     queue.forEach(item => {
         const box = document.createElement("div");
@@ -153,11 +143,11 @@ function queueDequeue() {
 }
 
 /* =========================
-   4 & 5. BST VISUALIZATION
+   4. BST VISUALIZATION
 ========================= */
 
 const canvas = document.getElementById("bst-canvas");
-const ctx = canvas.getContext("2d");
+const ctx = canvas ? canvas.getContext("2d") : null;
 
 let bstRoot = null;
 let animationRunning = false;
@@ -186,13 +176,13 @@ function bstInsert() {
     bstRoot = insertBST(bstRoot, value);
     clearStates(bstRoot);
     drawTree();
-    document.getElementById("bst-message").innerText = "Inserted: " + value;
+    document.getElementById("bst-message").innerText = `Inserted: ${value}`;
 }
 
-/* ===== SEARCH WITH PINK ANIMATION ===== */
+/* ===== BST SEARCH ===== */
 
 async function bstSearch() {
-    if (animationRunning) return;
+    if (animationRunning || !bstRoot) return;
     animationRunning = true;
 
     clearStates(bstRoot);
@@ -207,7 +197,7 @@ async function bstSearch() {
         if (node.val === value) {
             node.visited = true;
             drawTree();
-            document.getElementById("bst-message").innerText = "Found: " + value;
+            document.getElementById("bst-message").innerText = `Found: ${value}`;
             animationRunning = false;
             return;
         }
@@ -221,68 +211,10 @@ async function bstSearch() {
     animationRunning = false;
 }
 
-/* ===== TRAVERSAL ANIMATIONS ===== */
-
-async function bstInorder() {
-    if (animationRunning) return;
-    animationRunning = true;
-
-    clearStates(bstRoot);
-    await inorderAnim(bstRoot);
-    drawTree();
-    animationRunning = false;
-}
-
-async function bstPreorder() {
-    if (animationRunning) return;
-    animationRunning = true;
-
-    clearStates(bstRoot);
-    await preorderAnim(bstRoot);
-    drawTree();
-    animationRunning = false;
-}
-
-async function bstPostorder() {
-    if (animationRunning) return;
-    animationRunning = true;
-
-    clearStates(bstRoot);
-    await postorderAnim(bstRoot);
-    drawTree();
-    animationRunning = false;
-}
-
-async function inorderAnim(node) {
-    if (!node) return;
-    await inorderAnim(node.left);
-    node.visited = true;
-    drawTree();
-    await sleep(600);
-    await inorderAnim(node.right);
-}
-
-async function preorderAnim(node) {
-    if (!node) return;
-    node.visited = true;
-    drawTree();
-    await sleep(600);
-    await preorderAnim(node.left);
-    await preorderAnim(node.right);
-}
-
-async function postorderAnim(node) {
-    if (!node) return;
-    await postorderAnim(node.left);
-    await postorderAnim(node.right);
-    node.visited = true;
-    drawTree();
-    await sleep(600);
-}
-
-/* ===== TREE DRAWING ===== */
+/* ===== DRAWING ===== */
 
 function drawTree() {
+    if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     calculatePositions(bstRoot, canvas.width / 2, 40, canvas.width / 4);
     drawConnections(bstRoot);
@@ -321,19 +253,13 @@ function drawNodes(node) {
     drawNodes(node.right);
 }
 
-/* ===== UPDATED SIZE ONLY ===== */
-
 function drawCircle(node) {
     ctx.beginPath();
     ctx.arc(node.x, node.y, 20, 0, Math.PI * 2); // ✅ radius 20
 
-    ctx.fillStyle = (node.visited || node.highlight)
-        ? "#ff9a9e"
-        : "#b56576";
-
+    ctx.fillStyle = node.visited || node.highlight ? "#ff9a9e" : "#b56576";
     ctx.fill();
     ctx.strokeStyle = "#6d597a";
-    ctx.lineWidth = 2;
     ctx.stroke();
 
     ctx.fillStyle = "#fff";
@@ -342,8 +268,6 @@ function drawCircle(node) {
     ctx.textBaseline = "middle";
     ctx.fillText(node.val, node.x, node.y);
 }
-
-/* ===== HELPERS ===== */
 
 function clearStates(node) {
     if (!node) return;
@@ -361,4 +285,81 @@ function bstClear() {
     bstRoot = null;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     document.getElementById("bst-message").innerText = "Tree cleared";
+}
+
+/* =========================
+   5. ALGORITHMS (algorithm.html)
+========================= */
+
+function runAlgo(id) {
+    const outputBox = document.getElementById(`output-${id}`);
+    if (!outputBox) return;
+
+    outputBox.innerText = "Running...";
+
+    setTimeout(() => {
+        switch (id) {
+            case 1: {
+                const a = prompt("Enter first number:");
+                const b = prompt("Enter second number:");
+                outputBox.innerText = a && b ? `Sum: ${Number(a) + Number(b)}` : "Cancelled";
+                break;
+            }
+            case 2: {
+                const n = prompt("Enter number:");
+                outputBox.innerText = n ? `${n} is ${n % 2 === 0 ? "Even" : "Odd"}` : "Cancelled";
+                break;
+            }
+            case 3: {
+                const a = prompt("a:"), b = prompt("b:"), c = prompt("c:");
+                outputBox.innerText = a && b && c ? `Max: ${Math.max(a, b, c)}` : "Cancelled";
+                break;
+            }
+            case 4: {
+                const n = prompt("Enter number:");
+                let f = 1;
+                for (let i = 1; i <= n; i++) f *= i;
+                outputBox.innerText = `Factorial: ${f}`;
+                break;
+            }
+            case 5: {
+                const t = prompt("Terms:");
+                let fib = [0, 1];
+                for (let i = 2; i < t; i++) fib.push(fib[i - 1] + fib[i - 2]);
+                outputBox.innerText = fib.join(", ");
+                break;
+            }
+            case 6: {
+                const n = prompt("Number:");
+                let prime = n > 1;
+                for (let i = 2; i < n; i++) if (n % i === 0) prime = false;
+                outputBox.innerText = prime ? "Prime" : "Not Prime";
+                break;
+            }
+            case 7: {
+                const a = prompt("A:"), b = prompt("B:");
+                outputBox.innerText = `Swapped: A=${b}, B=${a}`;
+                break;
+            }
+            case 8: {
+                const n = prompt("Find (10,20,30):");
+                outputBox.innerText = [10, 20, 30].includes(Number(n)) ? "Found" : "Not Found";
+                break;
+            }
+            case 9: {
+                const s = prompt("String:");
+                outputBox.innerText = s.split("").reverse().join("");
+                break;
+            }
+            case 10: {
+                const r = prompt("Radius:");
+                outputBox.innerText = `Area: ${(Math.PI * r * r).toFixed(2)}`;
+                break;
+            }
+        }
+    }, 200);
+}
+
+function runPseudo(id) {
+    runAlgo(id);
 }
