@@ -70,6 +70,13 @@ let stack = [];
 function renderStack() {
     const visual = document.getElementById("stack-visual");
     visual.innerHTML = "";
+
+    /* ✅ FIX: LEFT → RIGHT STACK DISPLAY */
+    visual.style.display = "flex";
+    visual.style.flexDirection = "row";
+    visual.style.alignItems = "center";
+    visual.style.gap = "8px";
+
     stack.forEach(item => {
         const box = document.createElement("div");
         box.className = "data-item";
@@ -189,7 +196,7 @@ function bstInsert() {
     document.getElementById("bst-message").innerText = "Inserted: " + value;
 }
 
-/* ===== SEARCH WITH PINK ANIMATION ===== */
+/* ===== SEARCH ===== */
 
 async function bstSearch() {
     if (animationRunning) return;
@@ -216,40 +223,17 @@ async function bstSearch() {
         node = value < node.val ? node.left : node.right;
     }
 
-    drawTree();
     document.getElementById("bst-message").innerText = "Not found";
     animationRunning = false;
 }
 
-/* ===== TRAVERSALS WITH PINK STAY ===== */
+/* ===== TRAVERSALS ===== */
 
 async function bstInorder() {
     if (animationRunning) return;
     animationRunning = true;
-
     clearStates(bstRoot);
     await inorderAnim(bstRoot);
-    drawTree();
-    animationRunning = false;
-}
-
-async function bstPreorder() {
-    if (animationRunning) return;
-    animationRunning = true;
-
-    clearStates(bstRoot);
-    await preorderAnim(bstRoot);
-    drawTree();
-    animationRunning = false;
-}
-
-async function bstPostorder() {
-    if (animationRunning) return;
-    animationRunning = true;
-
-    clearStates(bstRoot);
-    await postorderAnim(bstRoot);
-    drawTree();
     animationRunning = false;
 }
 
@@ -262,25 +246,7 @@ async function inorderAnim(node) {
     await inorderAnim(node.right);
 }
 
-async function preorderAnim(node) {
-    if (!node) return;
-    node.visited = true;
-    drawTree();
-    await sleep(600);
-    await preorderAnim(node.left);
-    await preorderAnim(node.right);
-}
-
-async function postorderAnim(node) {
-    if (!node) return;
-    await postorderAnim(node.left);
-    await postorderAnim(node.right);
-    node.visited = true;
-    drawTree();
-    await sleep(600);
-}
-
-/* ===== TREE DRAWING (BIGGER CIRCLES & TEXT) ===== */
+/* ===== DRAW TREE ===== */
 
 function drawTree() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -309,7 +275,7 @@ function drawLine(p, c) {
     ctx.beginPath();
     ctx.moveTo(p.x, p.y);
     ctx.lineTo(c.x, c.y);
-    ctx.strokeStyle = "#a18cd1";
+    ctx.strokeStyle = "#f4a6c1";
     ctx.lineWidth = 2;
     ctx.stroke();
 }
@@ -321,24 +287,16 @@ function drawNodes(node) {
     drawNodes(node.right);
 }
 
-/* ===== BIGGER BST NODE DESIGN ===== */
-
 function drawCircle(node) {
     ctx.beginPath();
-    ctx.arc(node.x, node.y, 26, 0, Math.PI * 2); // ⬅ BIGGER CIRCLE
-
-    if (node.visited || node.highlight)
-        ctx.fillStyle = "#ff9a9e";
-    else
-        ctx.fillStyle = "#b56576";
-
+    ctx.arc(node.x, node.y, 26, 0, Math.PI * 2);
+    ctx.fillStyle = node.visited || node.highlight ? "#ff9a9e" : "#ffc2d1";
     ctx.fill();
-    ctx.strokeStyle = "#6d597a";
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = "#ff6f91";
     ctx.stroke();
 
     ctx.fillStyle = "#fff";
-    ctx.font = "bold 16px Arial"; // ⬅ BIGGER NUMBER
+    ctx.font = "bold 16px Arial";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(node.val, node.x, node.y);
@@ -358,88 +316,10 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function bstClear() {
-    bstRoot = null;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    document.getElementById("bst-message").innerText = "Tree cleared";
-        } 
-/* =====================================================
-   FIX SECTION – REQUIRED FOR ALGORITHMS & EXPRESSIONS
-===================================================== */
+/* =========================
+   INFIX → POSTFIX / PREFIX
+========================= */
 
-/* ---------- FIX 1: RUN BUTTON (algorithms.html) ---------- */
-function runAlgo(id) {
-    const out = document.getElementById(`output-${id}`);
-    if (!out) return;
-
-    switch (id) {
-        case 1: {
-            let a = +prompt("Enter A:");
-            let b = +prompt("Enter B:");
-            out.innerText = "Sum = " + (a + b);
-            break;
-        }
-        case 2: {
-            let n = +prompt("Enter number:");
-            out.innerText = n % 2 === 0 ? "Even" : "Odd";
-            break;
-        }
-        case 3: {
-            let a = +prompt("A:"), b = +prompt("B:"), c = +prompt("C:");
-            out.innerText = "Max = " + Math.max(a, b, c);
-            break;
-        }
-        case 4: {
-            let n = +prompt("Enter number:");
-            let f = 1;
-            for (let i = 1; i <= n; i++) f *= i;
-            out.innerText = "Factorial = " + f;
-            break;
-        }
-        case 5: {
-            let t = +prompt("Terms:");
-            let fib = [0, 1];
-            for (let i = 2; i < t; i++)
-                fib.push(fib[i - 1] + fib[i - 2]);
-            out.innerText = fib.slice(0, t).join(", ");
-            break;
-        }
-        case 6: {
-            let n = +prompt("Enter number:");
-            let prime = n > 1;
-            for (let i = 2; i < n; i++)
-                if (n % i === 0) prime = false;
-            out.innerText = prime ? "Prime" : "Not Prime";
-            break;
-        }
-        case 7: {
-            let a = prompt("A:"), b = prompt("B:");
-            out.innerText = `A=${b}, B=${a}`;
-            break;
-        }
-        case 8: {
-            let t = +prompt("Find in [10,20,30]:");
-            out.innerText = [10,20,30].includes(t) ? "Found" : "Not Found";
-            break;
-        }
-        case 9: {
-            let s = prompt("Enter string:");
-            out.innerText = s.split("").reverse().join("");
-            break;
-        }
-        case 10: {
-            let r = +prompt("Radius:");
-            out.innerText = "Area = " + (Math.PI * r * r).toFixed(2);
-            break;
-        }
-    }
-}
-
-function runPseudo(id) {
-    runAlgo(id);
-}
-
-/* ---------- FIX 2: INFIX → POSTFIX / PREFIX ---------- */
 function precedence(op) {
     if (op === "+" || op === "-") return 1;
     if (op === "*" || op === "/") return 2;
@@ -452,11 +332,9 @@ function infixToPostfix(exp) {
     let result = "";
 
     for (let ch of exp.replace(/\s+/g, "")) {
-        if (/[a-zA-Z0-9]/.test(ch)) {
-            result += ch;
-        } else if (ch === "(") {
-            stack.push(ch);
-        } else if (ch === ")") {
+        if (/[a-zA-Z0-9]/.test(ch)) result += ch;
+        else if (ch === "(") stack.push(ch);
+        else if (ch === ")") {
             while (stack.length && stack.at(-1) !== "(")
                 result += stack.pop();
             stack.pop();
@@ -479,40 +357,6 @@ function infixToPrefix(exp) {
 
 function convertExpression() {
     const input = document.getElementById("infix-input").value;
-    if (!input) return alert("Enter infix expression");
-
-    document.getElementById("out-postfix").innerText =
-        infixToPostfix(input);
-    document.getElementById("out-prefix").innerText =
-        infixToPrefix(input);
+    document.getElementById("out-postfix").innerText = infixToPostfix(input);
+    document.getElementById("out-prefix").innerText = infixToPrefix(input);
 }
-
-/* ---------- FIX 3: FORCE GIRLY BST COLORS ---------- */
-drawLine = function (p, c) {
-    ctx.beginPath();
-    ctx.moveTo(p.x, p.y);
-    ctx.lineTo(c.x, c.y);
-    ctx.strokeStyle = "#f4a6c1"; // 🌸 pink lines
-    ctx.lineWidth = 2;
-    ctx.stroke();
-};
-
-drawCircle = function (node) {
-    ctx.beginPath();
-    ctx.arc(node.x, node.y, 26, 0, Math.PI * 2);
-
-    ctx.fillStyle =
-        node.visited || node.highlight ? "#ff9a9e" : "#ffc2d1";
-
-    ctx.fill();
-    ctx.strokeStyle = "#ff6f91"; // 💗 pink border
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    ctx.fillStyle = "#fff";
-    ctx.font = "bold 16px Arial";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(node.val, node.x, node.y);
-};
-
