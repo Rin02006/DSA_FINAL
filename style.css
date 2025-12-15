@@ -248,5 +248,40 @@ footer {
 .demo-box > * {
     flex-shrink: 0;
 }
+/* ===================================================
+   ✅ FIX: PYTHON OUTPUT STAYS INSIDE ALGORITHM BOX
+   =================================================== */
+
+/* Make demo-box a strict container */
+.demo-box {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Python output container safety */
+.demo-box pre,
+.demo-box code,
+.demo-box .python-output,
+.demo-box .output,
+.demo-box p {
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+/* Push output to stay inside box */
+.demo-box > * {
+    flex-shrink: 0;
+}
+
+/* Ensure output does NOT escape box */
+.demo-box .python-output,
+.demo-box pre {
+    overflow-x: auto;
+    max-height: 200px;
+}
+
 
 
