@@ -27,18 +27,12 @@ body {
     font-family: 'Raleway', sans-serif;
     font-weight: 800;
     font-size: 1.5rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
 }
 .nav-link {
     font-weight: 600;
-    font-size: 1rem;
-    transition: all 0.3s;
 }
 .nav-link:hover {
     color: #fff !important;
-    transform: translateY(-2px);
-    text-shadow: 0 0 8px rgba(255,255,255,0.8);
 }
 
 /* --- HEADINGS --- */
@@ -66,27 +60,13 @@ h1, h2, h3, h5 {
     transform: translateX(-50%);
 }
 
-/* --- HERO SECTION --- */
-header {
-    background: var(--secondary-gradient);
-    border-bottom-left-radius: 50px;
-    border-bottom-right-radius: 50px;
-    box-shadow: 0 10px 30px rgba(161, 140, 209, 0.3);
-}
-
 /* --- CARDS & BOXES --- */
 .card, .demo-box, .member-card {
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: rgba(255,255,255,0.9);
     border-radius: 20px;
     box-shadow: 0 10px 25px rgba(255, 154, 158, 0.15);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
     padding: 25px;
-}
-
-.card:hover, .member-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 35px rgba(161, 140, 209, 0.3);
+    text-align: center;
 }
 
 /* --- BUTTONS --- */
@@ -94,63 +74,33 @@ header {
     border-radius: 50px;
     padding: 10px 25px;
     font-weight: 700;
-    font-family: 'Raleway', sans-serif;
-    border: none;
-    transition: all 0.3s;
 }
-.btn-primary { background: var(--primary-gradient); color: #fff; }
-.btn-light { background: white; color: #a18cd1; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-.btn-outline-light:hover { background: white; color: #ff9a9e; }
 
-/* --- CUTE CODE EDITOR DESIGN --- */
+/* --- CODE WINDOW --- */
 .code-window {
     border-radius: 15px;
     overflow: hidden;
     margin-bottom: 25px;
-    border: none;
     box-shadow: 0 15px 35px rgba(161, 140, 209, 0.4);
-    transition: transform 0.3s ease;
 }
-.code-window:hover { transform: translateY(-5px); }
 
 .code-header {
     background: var(--secondary-gradient);
     padding: 12px 20px;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
-}
-
-.window-dots { display: flex; gap: 8px; margin-right: 15px; }
-.dot { width: 12px; height: 12px; border-radius: 50%; }
-.dot.red { background-color: #ff8fa3; }
-.dot.yellow { background-color: #ffe66d; }
-.dot.green { background-color: #80ed99; }
-
-.lang-label {
-    color: #fff;
-    font-weight: 700;
-    font-size: 0.85rem;
-    margin-left: auto;
-    text-transform: uppercase;
-    opacity: 0.9;
 }
 
 .code-input {
     width: 100%;
-    min-height: 250px;
     background-color: #232136;
     color: #e0def4;
     border: none;
     padding: 20px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.9rem;
-    resize: vertical;
-    outline: none;
-    line-height: 1.5;
 }
 
-/* --- VISUAL CONTAINER --- */
+/* --- VISUAL CONTAINERS --- */
 .visual-container {
     min-height: 80px;
     margin-top: 20px;
@@ -158,17 +108,19 @@ header {
     background-color: rgba(255,255,255,0.6);
     border: 2px dashed #ff9a9e;
     border-radius: 10px;
+
     display: flex;
     gap: 10px;
-    flex-wrap: wrap;
     align-items: center;
+    flex-wrap: nowrap;   /* keeps LEFT → RIGHT */
 }
 
-/* ORIGINAL STACK RULE (kept) */
-#stack-visual { 
-    flex-direction: column-reverse;
+/* STACK VISUAL (LEFT → RIGHT) */
+#stack-visual {
+    flex-direction: row;
 }
 
+/* DATA ITEM BOX */
 .data-item {
     background: var(--primary-gradient);
     color: white;
@@ -180,32 +132,40 @@ header {
 }
 
 @keyframes popIn {
-    0% { opacity: 0; transform: scale(0.5); }
-    100% { opacity: 1; transform: scale(1); }
+    from { opacity: 0; transform: scale(0.5); }
+    to { opacity: 1; transform: scale(1); }
 }
 
+/* --- MEMBER ROLE TEXT --- */
+.member-role {
+    color: #b56576;
+    font-weight: 600;
+    margin-top: 5px;
+}
+
+/* --- FOOTER --- */
 footer {
     background: linear-gradient(to right, #6d597a, #355070);
     color: #ffcdb2;
     padding: 20px;
 }
 
-/* ==================================================
-   FIXES ONLY – NO THEME / DESIGN CHANGES
-================================================== */
-
-/* FIX 1: STACK HORIZONTAL (LEFT → RIGHT) */
-#stack-visual {
-    flex-direction: row !important;
+/* --- MOBILE SAFETY (NO DESIGN CHANGE) --- */
+@media (max-width: 768px) {
+    .visual-container {
+        overflow-x: auto;
+        touch-action: pan-x;
+    }
 }
 
-/* FIX 2: EVEN PADDING FOR ABOUT PAGE */
-.about-section {
-    padding: 40px 40px;
-}
-
-.about-section .card,
-.about-section .member-card,
-.about-section .demo-box {
-    padding: 25px;
+/* ===================================================
+   ✅ FIX: EVEN NAME HEIGHT (ABOUT PAGE)
+   =================================================== */
+.member-card h5 {
+    min-height: 48px;          /* SAME height for all names */
+    display: flex;
+    align-items: center;       /* vertical center */
+    justify-content: center;   /* horizontal center */
+    text-align: center;
+    margin-bottom: 5px;
 }
